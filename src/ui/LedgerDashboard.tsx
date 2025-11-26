@@ -25,6 +25,10 @@ import styled from 'styled-components';
 
 const FlexSidebar = styled(FlexShrink)`
   flex-basis: 20%;
+  @media (max-width: 768px) {
+    flex-basis: auto;
+    width: 100%;
+  }
 `;
 
 export const LedgerDashboard: React.FC<{
@@ -44,9 +48,8 @@ export const LedgerDashboard: React.FC<{
     props.setTutorialIndex(index); // This updates the saved state
   };
 
-  return Platform.isMobile ? (
-    <MobileDashboard settings={props.settings} txCache={props.txCache} />
-  ) : (
+    // 修改后的代码：不再区分 Mobile/Desktop，统一渲染主 Dashboard
+  return (
     <DesktopDashboard
       tutorialIndex={tutorialIndex}
       setTutorialIndex={setTutorialIndexWrapper}
