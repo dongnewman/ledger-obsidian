@@ -4,6 +4,7 @@ import {
 } from '../balance-utils';
 import { Interval } from '../date-utils';
 import { LedgerModifier } from '../file-interface';
+import { t } from '../i18n';
 import type { TransactionCache } from '../parser';
 import { ISettings } from '../settings';
 import { AccountsList } from './AccountsList';
@@ -39,7 +40,7 @@ export const LedgerDashboard: React.FC<{
   updater: LedgerModifier;
 }> = (props): JSX.Element => {
   if (!props.txCache) {
-    return <p>Loading...</p>;
+    return <p>{t('loading')}</p>;
   }
 
   const [tutorialIndex, setTutorialIndex] = React.useState(props.tutorialIndex);
@@ -64,7 +65,7 @@ const Header: React.FC<{}> = (props): JSX.Element => (
   <div>
     <FlexContainer>
       <FlexSidebar>
-        <h2>Ledger</h2>
+        <h2>{t('ledger')}</h2>
       </FlexSidebar>
       <FlexFloatRight>{props.children}</FlexFloatRight>
     </FlexContainer>
@@ -85,7 +86,7 @@ const MobileDashboard: React.FC<{
     />
   );
   */
-  return <p>Dashboard not yet supported on mobile.</p>;
+  return <p>{t('dashboard-not-supported-mobile')}</p>;
 };
 
 const DesktopDashboard: React.FC<{

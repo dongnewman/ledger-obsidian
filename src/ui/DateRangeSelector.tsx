@@ -1,4 +1,5 @@
 import { Interval } from '../date-utils';
+import { t } from '../i18n';
 import {
   Button,
   DatePicker,
@@ -37,7 +38,7 @@ export const DateRangeSelector: React.FC<{
           );
         }}
       >
-        Daily
+        {t('daily')}
       </Button>
       <Button
         selected={props.interval === 'week'}
@@ -51,7 +52,7 @@ export const DateRangeSelector: React.FC<{
           );
         }}
       >
-        Weekly
+        {t('weekly')}
       </Button>
       <Button
         selected={props.interval === 'month'}
@@ -65,7 +66,7 @@ export const DateRangeSelector: React.FC<{
           );
         }}
       >
-        Monthly
+        {t('monthly')}
       </Button>
     </FlexFloatRight>
 

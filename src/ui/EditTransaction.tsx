@@ -1,4 +1,5 @@
 import { LedgerModifier } from '../file-interface';
+import { t } from '../i18n';
 import { Operation } from '../modals';
 import {
   EnhancedExpenseLine,
@@ -95,7 +96,7 @@ const calcPlaceholderExpenseLineAmount = (
   );
   if (numEmptyLines === 0 && unassignedTotal !== 0) {
     return err(
-      'All expense lines assigned, however amounts do not balance to 0',
+      t('all-expense-lines-assigned-but-not-zero'),
     );
   }
   return ok((unassignedTotal / numEmptyLines).toFixed(2));
@@ -160,11 +161,11 @@ const ExpenseLine: React.FC<{
     const lastI = lines.length - 1;
     switch (formik.values.txType) {
       case 'expense':
-        return i !== lastI ? 'Expense' : 'Asset';
+        return i !== lastI ? t('expense') : t('asset');
       case 'income':
-        return i !== lastI ? 'Asset' : 'Expense';
+        return i !== lastI ? t('asset') : t('expense');
       case 'transfer':
-        return i !== lastI ? 'To' : 'From';
+        return i !== lastI ? t('to') : t('from');
     }
     return '';
   };
@@ -204,7 +205,7 @@ const ExpenseLine: React.FC<{
           className="flexGrow"
           component={TextSuggest}
           name={`lines.${i}.account`}
-          placeholder={getAccountName() + ' Account'}
+          placeholder={getAccountName() + ' ' + t('account')}
           suggestions={getSuggestions()}
         />
         {i + 1 !== lines.length ? (
@@ -213,7 +214,7 @@ const ExpenseLine: React.FC<{
             component={CurrencyInputFormik}
             placeholder={calcPlaceholderExpenseLineAmount(
               formik.values,
-            ).unwrapOr('Error')}
+            ).unwrapOr(t('error'))}
             currencySymbol={props.currencySymbol}
             name={`lines.${i}.amount`}
           />
@@ -247,7 +248,7 @@ const ExpenseLine: React.FC<{
           className="flexGrow"
           type="text"
           name={`lines.${i}.comment`}
-          placeholder="Memo"
+          placeholder={t('memo')}
         />
       </div>
     </ExpenseLineStyle>
@@ -373,13 +374,11 @@ export const EditTransaction: React.FC<{
 
   return (
     <FormStyles>
-      <h2>Add to Ledger</h2>
+      <h2>{t('add-to-ledger')}</h2>
 
       {props.displayFileWarning ? (
         <Warning>
-          Please rename your ledger file to end with the .ledger extension. Once
-          renamed, please update the configuration option in the Ledger plugin
-          settings.
+          {t('file-warning')}
         </Warning>
       ) : null}
 
@@ -390,19 +389,19 @@ export const EditTransaction: React.FC<{
           const errors: ValueErrors = {};
 
           if (values.date === '') {
-            errors.date = 'Required';
+            errors.date = t('required');
           }
           if (values.total === '') {
-            errors.total = 'Required';
+            errors.total = t('required');
           } else if (Number.isNaN(parseFloat(values.total))) {
-            errors.total = 'Total must be a number';
+            errors.total = t('total-must-be-number');
           }
           if (values.txType !== 'transfer' && values.payee === '') {
-            errors.payee = 'Required';
+            errors.payee = t('required');
           }
 
           if (values.lines.some((line) => line.account === '')) {
-            errors.lines = 'All expense lines must specify an account';
+            errors.lines = t('all-expense-lines-must-specify-account');
           }
 
           if (values.lines.filter((line) => line.amount === '').length === 0) {
@@ -412,9 +411,10 @@ export const EditTransaction: React.FC<{
               0,
             );
             if (sum !== 0) {
-              errors.lines = `Amounts add up to $${sum.toFixed(
-                2,
-              )} but must add up to $0`;
+              errors.lines = t('amounts-add-up-to-but-must-be-zero').replace(
+                '${sum}',
+                '$' + sum.toFixed(2),
+              );
             }
           }
 
@@ -488,9 +488,9 @@ export const EditTransaction: React.FC<{
                     name="txType"
                     component={ButtonGroup}
                     options={[
-                      ['expense', 'Expense'],
-                      ['income', 'Income'],
-                      ['transfer', 'Transfer'],
+                      ['expense', t('expense')],
+                      ['income', t('income')],
+                      ['transfer', t('transfer')],
                     ]}
                   />
                 </Margin>
@@ -500,7 +500,7 @@ export const EditTransaction: React.FC<{
                       component={CurrencyInputFormik}
                       currencySymbol={props.currencySymbol}
                       name="total"
-                      placeholder="Total Amount"
+                      placeholder={t('total-amount')}
                     />
                     <ErrorMessage name="total" component="div" />
                   </Margin>
@@ -515,7 +515,7 @@ export const EditTransaction: React.FC<{
                     <Field
                       component={TextSuggest}
                       name="payee"
-                      placeholder="Payee (e.g. Obsidian.md)"
+                      placeholder={t('payee-placeholder')}
                       suggestions={props.txCache.payees}
                     />
                     <ErrorMessage name="payee" component="div" />
@@ -555,7 +555,7 @@ export const EditTransaction: React.FC<{
                           insert(formik.values.lines.length - 1, newLine);
                         }}
                       >
-                        Add Split
+                        {t('add-split')}
                       </button>
                     </>
                   )}
@@ -594,7 +594,7 @@ export const EditTransaction: React.FC<{
                     }
                   }}
                 >
-                  Next
+                  {t('next')}
                 </button>
               )}
               {page === 2 && (
@@ -605,10 +605,10 @@ export const EditTransaction: React.FC<{
                       setPage(page - 1);
                     }}
                   >
-                    Back
+                    {t('back')}
                   </button>
                   <button type="submit" disabled={formik.isSubmitting}>
-                    Submit
+                    {t('submit')}
                   </button>
                 </>
               )}

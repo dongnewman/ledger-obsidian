@@ -1,4 +1,5 @@
 import { Values } from './EditTransaction';
+import { t } from '../i18n';
 import { FieldProps } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
@@ -32,7 +33,7 @@ export const CurrencyInputFormik: React.FC<
   } & FieldProps<string, Values>
 > = (props): JSX.Element => (
   <CurrencyInput
-    placeholder={props.placeholder || 'Amount'}
+    placeholder={props.placeholder || t('amount-placeholder')}
     currencySymbol={props.currencySymbol}
     amount={props.field.value}
     setValue={(newValue: string) => {

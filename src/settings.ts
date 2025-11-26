@@ -1,4 +1,5 @@
 const defaultSettings: ISettings = {
+  language: 'en',
   tutorialIndex: 0,
 
   currencySymbol: '$',
@@ -11,6 +12,7 @@ const defaultSettings: ISettings = {
 };
 
 export interface ISettings {
+  language: string;
   tutorialIndex: number;
 
   currencySymbol: string;

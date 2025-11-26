@@ -11,6 +11,7 @@ import {
   filterTransactions,
   getTotal,
 } from '../transaction-utils';
+import { t } from '../i18n';
 import { Moment } from 'moment';
 import React from 'react';
 import { Column, useFilters, useSortBy, useTable } from 'react-table';
@@ -53,8 +54,8 @@ export const MobileTransactionEntry: React.FC<{
   return (
     <div>
       <h3>{props.tx.value.payee}</h3>
-      <div>From: {(nonCommentLines.last() as EnhancedExpenseLine).account}</div>
-      <div>Amount: {getTotal(props.tx, props.currencySymbol)}</div>
+      <div>{t('from')}: {(nonCommentLines.last() as EnhancedExpenseLine).account}</div>
+      <div>{t('amount')}: {getTotal(props.tx, props.currencySymbol)}</div>
     </div>
   );
 };
@@ -190,7 +191,7 @@ const buildTableRows = (
       payee: tx.value.payee,
       total: getTotal(tx, currencySymbol),
       from: nonCommentLines[nonCommentLines.length - 1].account,
-      to: <i>Multiple</i>,
+      to: <i>{t('multiple')}</i>,
       actions: makeClone(tx),
     };
   });
@@ -237,7 +238,7 @@ export const RecentTransactionList: React.FC<{
   }, [props.txCache, props.startDate, props.endDate]);
   return (
     <>
-      <h2>Last 10 Transactions for Selected Dates</h2>
+      <h2>{t('last-10-transactions')}</h2>
       <TransactionTable data={data} />
     </>
   );
@@ -282,29 +283,29 @@ const TransactionTable: React.FC<{
 }> = ({ data }): JSX.Element => {
   if (data.length === 0) {
     // TODO: Style and center this
-    return <p>No transactions for the selected time period.</p>;
+    return <p>{t('no-transactions-time-period')}</p>;
   }
 
   const columns = React.useMemo<Column[]>(
     () => [
       {
-        Header: 'Date',
+        Header: t('date'),
         accessor: 'date',
       },
       {
-        Header: 'Payee',
+        Header: t('payee'),
         accessor: 'payee',
       },
       {
-        Header: 'Total',
+        Header: t('total'),
         accessor: 'total',
       },
       {
-        Header: 'From Account',
+        Header: t('from-account'),
         accessor: 'from',
       },
       {
-        Header: 'To Account',
+        Header: t('to-account'),
         accessor: 'to',
       },
       {

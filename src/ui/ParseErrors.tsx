@@ -1,4 +1,5 @@
 import { Error } from '../error';
+import { t } from '../i18n';
 import { TransactionCache } from '../parser';
 import React from 'react';
 import styled from 'styled-components';
@@ -34,7 +35,7 @@ const ErrorDetail: React.FC<{
   const expandedDetails =
     'transaction' in props.error ? (
       <>
-        <p>The erroneous transaction:</p>
+        <p>{t('erroneous-transaction')}</p>
         <pre>
           {props.error.transaction.block
             ? props.error.transaction.block.block
@@ -43,7 +44,7 @@ const ErrorDetail: React.FC<{
       </>
     ) : (
       <>
-        <p>The erroneous transaction:</p>
+        <p>{t('erroneous-transaction')}</p>
         <pre>{props.error.block.block}</pre>
       </>
     );

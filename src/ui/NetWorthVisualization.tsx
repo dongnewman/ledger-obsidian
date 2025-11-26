@@ -1,5 +1,6 @@
 import { makeNetWorthData } from '../balance-utils';
 import { Interval, makeBucketNames } from '../date-utils';
+import { t } from '../i18n';
 import { ISettings } from '../settings';
 import { ILineChartOptions } from 'chartist';
 import { Moment } from 'moment';
@@ -46,8 +47,8 @@ export const NetWorthVisualization: React.FC<{
   const type = 'Line';
   return (
     <>
-      <h2>Net Worth</h2>
-      <i>Assets minus liabilities</i>
+      <h2>{t('net-worth')}</h2>
+      <i>{t('assets-minus-liabilities')}</i>
 
       <Chart>
         <ChartistGraph data={data} options={options} type={type} />

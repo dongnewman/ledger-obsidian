@@ -1,5 +1,6 @@
 import { getTransactionCache, LedgerModifier } from './file-interface';
 import { billIcon } from './graphics';
+import { t, setLocale, Language } from './i18n';
 import { LedgerView, LedgerViewType } from './ledgerview';
 import type { TransactionCache } from './parser';
 import { ISettings, settingsWithDefaults } from './settings';
@@ -43,10 +44,11 @@ export default class LedgerPlugin extends Plugin {
     this.txCacheSubscriptions = [];
 
     await this.loadSettings();
+    setLocale(this.settings.language as Language);
     this.addSettingTab(new SettingsTab(this));
 
     addIcon('ledger', billIcon);
-    this.addRibbonIcon('ledger', 'Add to Ledger', async () => {
+    this.addRibbonIcon('ledger', t('add-to-ledger'), async () => {
       const ledgerFile = await this.createLedgerFileIfMissing();
       new LedgerModifier(this, ledgerFile).openExpenseModal('new');
     });
@@ -94,7 +96,7 @@ export default class LedgerPlugin extends Plugin {
               menu
                 .addItem((item) => {
                   item
-                    .setTitle('Open as Ledger file')
+                    .setTitle(t('open-as-ledger-file'))
                     .setIcon('ledger')
                     .onClick(() => {
                       const state = this.leaf.view.getState();

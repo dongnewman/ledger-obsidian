@@ -5,6 +5,7 @@ import {
   removeDuplicateAccounts,
 } from '../balance-utils';
 import { Interval, makeBucketNames } from '../date-utils';
+import { t } from '../i18n';
 import { IBarChartOptions, ILineChartOptions } from 'chartist';
 import { Moment } from 'moment';
 import React from 'react';
@@ -81,8 +82,8 @@ export const AccountVisualization: React.FC<{
               setMode(e.target.value);
             }}
           >
-            <option value="balance">Account Balance</option>
-            <option value="pnl">Profit and Loss</option>
+            <option value="balance">{t('account-balance')}</option>
+            <option value="pnl">{t('profit-and-loss')}</option>
           </select>
         </ChartTypeSelector>
         <Legend>

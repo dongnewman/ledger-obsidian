@@ -1,4 +1,5 @@
 import { buyMeACoffee, paypal } from './graphics';
+import { t, setLocale, languages, Language } from './i18n';
 import LedgerPlugin from './main';
 import { PluginSettingTab, Setting } from 'obsidian';
 
@@ -14,11 +15,28 @@ export class SettingsTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl('h2', { text: 'Ledger Plugin - Settings' });
+    setLocale(this.plugin.settings.language as Language);
+
+    containerEl.createEl('h2', { text: t('settings-title') });
 
     new Setting(containerEl)
-      .setName('Currency Symbol')
-      .setDesc('Prefixes all transaction amounts')
+      .setName(t('language'))
+      .setDesc(t('language-desc'))
+      .addDropdown((dropdown) => {
+        for (const key in languages) {
+          dropdown.addOption(key, languages[key as Language]);
+        }
+        dropdown.setValue(this.plugin.settings.language);
+        dropdown.onChange(async (value) => {
+          this.plugin.settings.language = value;
+          await this.plugin.saveData(this.plugin.settings);
+          this.display(); // Refresh to apply language change
+        });
+      });
+
+    new Setting(containerEl)
+      .setName(t('currency-symbol'))
+      .setDesc(t('currency-symbol-desc'))
       .addText((text) => {
         text.setPlaceholder('$').setValue(this.plugin.settings.currencySymbol);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -30,10 +48,8 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('Ledger File')
-      .setDesc(
-        'Path in the Vault to your Ledger file. NOTE: If you use Obsidian Sync, you must enable "Sync all other types".',
-      )
+      .setName(t('ledger-file'))
+      .setDesc(t('ledger-file-desc'))
       .addText((text) => {
         text
           .setValue(this.plugin.settings.ledgerFile)
@@ -53,17 +69,15 @@ export class SettingsTab extends PluginSettingTab {
         };
       });
 
-    containerEl.createEl('h3', 'Transaction Account Prefixes');
+    containerEl.createEl('h3', { text: t('transaction-account-prefixes') });
 
     containerEl.createEl('p', {
-      text: "Ledger uses accounts to group expense types. Accounts are grouped into a hierarchy by separating with a colon. For example 'expenses:food:grocery' and 'expenses:food:restaurants",
+      text: t('transaction-account-prefixes-desc'),
     });
 
     new Setting(containerEl)
-      .setName('Asset Account Prefix')
-      .setDesc(
-        'The account prefix used for grouping asset accounts. If you use aliases in your Ledger file, this must be the **unaliased** account prefix. e.g. "Assets" instead of "a"',
-      )
+      .setName(t('asset-account-prefix'))
+      .setDesc(t('asset-account-prefix-desc'))
       .addText((text) => {
         text.setValue(this.plugin.settings.assetAccountsPrefix);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -75,10 +89,8 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('Expense Account Prefix')
-      .setDesc(
-        'The account prefix used for grouping expense accounts. If you use aliases in your Ledger file, this must be the **unaliased** account prefix. e.g. "Expenses" instead of "e"',
-      )
+      .setName(t('expense-account-prefix'))
+      .setDesc(t('expense-account-prefix-desc'))
       .addText((text) => {
         text.setValue(this.plugin.settings.expenseAccountsPrefix);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -90,10 +102,8 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('Income Account Prefix')
-      .setDesc(
-        'The account prefix used for grouping income accounts. If you use aliases in your Ledger file, this must be the **unaliased** account prefix. e.g. "Income" instead of "i"',
-      )
+      .setName(t('income-account-prefix'))
+      .setDesc(t('income-account-prefix-desc'))
       .addText((text) => {
         text.setValue(this.plugin.settings.incomeAccountsPrefix);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -105,10 +115,8 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('Liability Account Prefix')
-      .setDesc(
-        'The account prefix used for grouping liability accounts. If you use aliases in your Ledger file, this must be the **unaliased** account prefix. e.g. "Liabilities" instead of "l"',
-      )
+      .setName(t('liability-account-prefix'))
+      .setDesc(t('liability-account-prefix-desc'))
       .addText((text) => {
         text.setValue(this.plugin.settings.liabilityAccountsPrefix);
         text.inputEl.onblur = (e: FocusEvent) => {
@@ -124,10 +132,7 @@ export class SettingsTab extends PluginSettingTab {
     });
 
     const donateText = document.createElement('p');
-    donateText.appendText(
-      'If this plugin adds value for you and you would like to help support ' +
-        'continued development, please use the buttons below:',
-    );
+    donateText.appendText(t('donate-desc'));
     div.appendChild(donateText);
 
     const parser = new DOMParser();
