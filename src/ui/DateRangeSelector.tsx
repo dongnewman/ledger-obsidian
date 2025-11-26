@@ -1,4 +1,4 @@
-import { Interval } from '../date-utils';
+import { Interval, parseDate } from '../date-utils';
 import { t } from '../i18n';
 import {
   Button,
@@ -76,7 +76,7 @@ export const DateRangeSelector: React.FC<{
         placeholder="Start"
         value={props.startDate.format('YYYY-MM-DD')}
         onChange={(e) => {
-          const newDate = window.moment(e.target.value);
+          const newDate = parseDate(e.target.value);
           props.setStartDate(newDate);
           if (newDate.isAfter(props.endDate)) {
             props.setEndDate(newDate);
@@ -97,7 +97,7 @@ export const DateRangeSelector: React.FC<{
         value={props.endDate.format('YYYY-MM-DD')}
         max={window.moment().format('YYYY-MM-DD')}
         onChange={(e) => {
-          const newDate = window.moment(e.target.value);
+          const newDate = parseDate(e.target.value);
           props.setEndDate(newDate.clone());
           if (newDate.isBefore(props.startDate)) {
             props.setStartDate(newDate);

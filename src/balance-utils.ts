@@ -2,10 +2,12 @@ import { getWithDefault } from './generic-utils';
 import { EnhancedTransaction } from './parser';
 import { ISettings } from './settings';
 import { Moment } from 'moment';
+import { parseDate } from './date-utils';
 
 export type ChartData = {
   x: string | number | Date;
   y: number;
+  meta?: any;
 }[];
 
 const calcNetWorth = (
@@ -31,6 +33,9 @@ export const makeNetWorthData = (
     return {
       x: bucket,
       y: netWorth,
+      meta: `${bucket.replace(/-/g, '/')}\n${
+        settings.currencySymbol
+      }${netWorth.toFixed(2)}`,
     };
   });
 
@@ -53,7 +58,11 @@ export const makeBalanceData = (
       0,
     );
 
-    return { x: bucket, y: balance };
+    return {
+      x: bucket,
+      y: balance,
+      meta: `${bucket.replace(/-/g, '/')}\n￥${balance}`,
+    };
   });
 };
 
@@ -179,7 +188,7 @@ export const makeDailyAccountBalanceChangeMap = (
     new Map<string, number[]>();
   const makeDefaultBalanceList = (): number[] => [];
   transactions.forEach((tx) => {
-    const normalizedDate = window.moment(tx.value.date).format('YYYY-MM-DD');
+    const normalizedDate = parseDate(tx.value.date).format('YYYY-MM-DD');
     const accounts = getWithDefault(
       txDateAccountMap,
       normalizedDate,

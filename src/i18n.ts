@@ -77,6 +77,7 @@ const en = {
   'to-account': 'To Account',
   'erroneous-transaction': 'The erroneous transaction:',
   'amount-placeholder': 'Amount',
+  'net-worth-zero-warning': 'Net Worth is 0. If this is unexpected, please check that your Asset and Liability account prefixes in Settings match your Ledger file.',
 };
 
 const zh_cn = {
@@ -151,6 +152,7 @@ const zh_cn = {
   'to-account': '转入账户',
   'erroneous-transaction': '错误的交易：',
   'amount-placeholder': '金额',
+  'net-worth-zero-warning': '净资产为 0。如果这不符合预期，请检查设置中的资产和负债账户前缀是否与您的 Ledger 文件匹配。',
 };
 
 const localeMap: Record<Language, typeof en> = {

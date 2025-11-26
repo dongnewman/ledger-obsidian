@@ -1,4 +1,5 @@
 import { EnhancedTransaction } from './parser';
+import { parseDate } from './date-utils';
 import { some } from 'lodash';
 import { Moment } from 'moment';
 
@@ -93,8 +94,8 @@ export const getCurrency = (
  */
 export const firstDate = (txs: EnhancedTransaction[]): Moment =>
   txs.reduce((prev, tx) => {
-    const current = window.moment(tx.value.date);
-    return current.isSameOrBefore(prev) ? current : prev;
+    const current = parseDate(tx.value.date);
+    return current.isValid() && current.isSameOrBefore(prev) ? current : prev;
   }, window.moment());
 
 export const valueForAccount = (
@@ -140,12 +141,12 @@ export const filterByPayeeExact =
 export const filterByStartDate =
   (start: Moment): Filter =>
   (tx) =>
-    start.isSameOrBefore(window.moment(tx.value.date));
+    start.isSameOrBefore(parseDate(tx.value.date));
 
 export const filterByEndDate =
   (end: Moment): Filter =>
   (tx) =>
-    end.isSameOrAfter(window.moment(tx.value.date));
+    end.isSameOrAfter(parseDate(tx.value.date));
 
 /**
  * filterTransactions filters the provided transactions if _any_ of the provided

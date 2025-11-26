@@ -12,6 +12,7 @@ import {
   getTotal,
 } from '../transaction-utils';
 import { t } from '../i18n';
+import { parseDate } from '../date-utils';
 import { Moment } from 'moment';
 import React from 'react';
 import { Column, useFilters, useSortBy, useTable } from 'react-table';
@@ -198,8 +199,8 @@ const buildTableRows = (
 
   // Sort so most recent transactions come first
   tableRows.sort((a, b): number => {
-    const aDate = window.moment(a.date);
-    const bDate = window.moment(b.date);
+    const aDate = parseDate(a.date);
+    const bDate = parseDate(b.date);
     if (aDate.isSame(bDate)) {
       return 0;
     }

@@ -7,6 +7,7 @@ import {
   TransactionCache,
 } from '../parser';
 import { formatTransaction, getTotalAsNum } from '../transaction-utils';
+import { parseDate } from '../date-utils';
 import { CurrencyInputFormik } from './CurrencyInput';
 import { TextSuggest } from './TextSuggest';
 import {
@@ -339,7 +340,7 @@ export const EditTransaction: React.FC<{
     txType: isNew ? 'expense' : 'unknown',
     date: isNew
       ? window.moment().format('YYYY-MM-DD')
-      : window.moment(props.initialState.value.date).format('YYYY-MM-DD'),
+      : parseDate(props.initialState.value.date).format('YYYY-MM-DD'),
     total: isNew ? '' : getTotalAsNum(props.initialState).toString(),
     lines: isNew
       ? [
